@@ -1,0 +1,13 @@
+Kleine Gitbefehle zum Nachschlagen
+
+- git push origin main:Elias --> Sachen in meinen Branch pushen
+
+
+# Git large file storage
+
+- git lfs track "*.psd" --> to track the file
+- git add .gitattributes
+- git add file.psd
+- git commit -m "Add design file"
+- git push origin main
+
