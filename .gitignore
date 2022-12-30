@@ -2,3 +2,5 @@ dat/
 *.xml
 *.iml
 idea/
+*checkpoint.ipynb
+GAN_Model/.ipynb_checkpoints/
