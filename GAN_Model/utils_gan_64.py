@@ -9,9 +9,9 @@ import tensorflow as tf
 
 
 # global vars
-IMG_SHAPE = [256, 256]
+IMG_SHAPE = [64, 64]
 NUM_CHANNELS = 1
-BATCH_SIZE = 16
+BATCH_SIZE = 32
 
 # This method returns a helper function to compute cross entropy loss
 cross_entropy = tf.keras.losses.BinaryCrossentropy(from_logits=True)
@@ -86,6 +86,7 @@ def generate_and_save_images(model, epoch, test_input, imsave_dir):
     # tight_layout minimizes the overlap between 2 sub-plots
     # plt.tight_layout()
     plt.savefig(os.path.join(imsave_dir, 'image_at_epoch_{:04d}.png'.format(epoch)))
+    # plt.show()
     plt.close()
 
 
@@ -103,32 +104,29 @@ class Generator(tf.keras.Model):
 
     def __init__(self):
         super(Generator, self).__init__()
-        self.fc1 = tf.keras.layers.Dense(8 * 8 * 256, use_bias=False)
+        self.fc1 = tf.keras.layers.Dense(8 * 8 * 64, use_bias=False)
         self.batchnorm1 = tf.keras.layers.BatchNormalization()
 
-        self.conv1 = tf.keras.layers.Conv2DTranspose(256 * 8, (4, 4), strides=(1, 1), padding='same', use_bias=False)
+        self.conv1 = tf.keras.layers.Conv2DTranspose(64 * 8, (4, 4), strides=(1, 1), padding='same', use_bias=False)
         self.batchnorm2 = tf.keras.layers.BatchNormalization()
 
-        self.conv2 = tf.keras.layers.Conv2DTranspose(256 * 4, (4, 4), strides=(2, 2), padding='same', use_bias=False)
+        self.conv2 = tf.keras.layers.Conv2DTranspose(64 * 4, (4, 4), strides=(2, 2), padding='same', use_bias=False)
         self.batchnorm3 = tf.keras.layers.BatchNormalization()
 
-        self.conv3 = tf.keras.layers.Conv2DTranspose(256 * 2, (4, 4), strides=(2, 2), padding='same', use_bias=False)
+        self.conv3 = tf.keras.layers.Conv2DTranspose(64 * 2, (4, 4), strides=(2, 2), padding='same', use_bias=False)
         self.batchnorm4 = tf.keras.layers.BatchNormalization()
 
-        self.conv4 = tf.keras.layers.Conv2DTranspose(256 * 1, (4, 4), strides=(2, 2), padding='same', use_bias=False)
+        self.conv4 = tf.keras.layers.Conv2DTranspose(64 * 1, (4, 4), strides=(2, 2), padding='same', use_bias=False)
         self.batchnorm5 = tf.keras.layers.BatchNormalization()
 
-        self.conv5 = tf.keras.layers.Conv2DTranspose(128, (4, 4), strides=(2, 2), padding='same', use_bias=False)
-        self.batchnorm6 = tf.keras.layers.BatchNormalization()
-
-        self.conv6 = tf.keras.layers.Conv2DTranspose(1, (4, 4), strides=(2, 2), padding='same', use_bias=False)
+        self.conv5 = tf.keras.layers.Conv2DTranspose(1, (4, 4), strides=(1, 1), padding='same', use_bias=False)
 
     def call(self, x, training=True):
         x = self.fc1(x)
         x = self.batchnorm1(x, training=training)
         x = tf.nn.relu(x)
 
-        x = tf.reshape(x, shape=(-1, 8, 8, 256))
+        x = tf.reshape(x, shape=(-1, 8, 8, 64))
 
         x = self.conv1(x)
         x = self.batchnorm2(x, training=training)
@@ -146,11 +144,7 @@ class Generator(tf.keras.Model):
         x = self.batchnorm5(x, training=training)
         x = tf.nn.relu(x)
 
-        x = self.conv5(x)
-        x = self.batchnorm6(x, training=training)
-        x = tf.nn.relu(x)
-
-        x = tf.nn.tanh(self.conv6(x))
+        x = tf.nn.tanh(self.conv5(x))
 
         return x
 
@@ -160,12 +154,12 @@ class Discriminator(tf.keras.Model):
 
     def __init__(self):
         super(Discriminator, self).__init__()
-        self.conv1 = tf.keras.layers.Conv2D(256, (4, 4), strides=(2, 2), padding='same')
-        self.conv2 = tf.keras.layers.Conv2D(256 * 2, (4, 4), strides=(2, 2), padding='same')
+        self.conv1 = tf.keras.layers.Conv2D(64, (4, 4), strides=(2, 2), padding='same')
+        self.conv2 = tf.keras.layers.Conv2D(64 * 2, (4, 4), strides=(2, 2), padding='same')
         self.batchnorm2 = tf.keras.layers.BatchNormalization()
-        self.conv3 = tf.keras.layers.Conv2D(256 * 4, (4, 4), strides=(2, 2), padding='same')
+        self.conv3 = tf.keras.layers.Conv2D(64 * 4, (4, 4), strides=(2, 2), padding='same')
         self.batchnorm3 = tf.keras.layers.BatchNormalization()
-        self.conv4 = tf.keras.layers.Conv2D(256 * 8, (4, 4), strides=(2, 2), padding='same')
+        self.conv4 = tf.keras.layers.Conv2D(64 * 8, (4, 4), strides=(2, 2), padding='same')
         self.batchnorm4 = tf.keras.layers.BatchNormalization()
         self.conv5 = tf.keras.layers.Conv2D(1, (4, 4), strides=(1, 1), padding='valid')
 
