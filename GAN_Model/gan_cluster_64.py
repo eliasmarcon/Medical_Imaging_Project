@@ -3,19 +3,22 @@ import logging
 import sys
 import time
 
-from utils_gan import *
+from utils_gan_64 import *
+
+logging.basicConfig()
+logging.getLogger().setLevel(logging.INFO)
 
 # TODO: add commandline arguments (epoch, batch size, img output dir, model_name)
 # To add commandline arguments, we can either utilize 'sys.argv[]' or the CLICK library
 # if sys, we need to define defaults within an IF statement or similar
 BENIGN_PATH = '/home/ds21m011/mi/dat/benign/'
 MALIGNANT_PATH = '/home/ds21m011/mi/dat/malignant/'
-save_dir_benign = "/home/ds21m011/mi/GAN_Model/GAN_Images/benign/"
+save_dir_benign = "/home/ds21m011/mi/GAN_Model/GAN_Images/benign_64/"
 save_dir_malignant = "/home/ds21m011/mi/GAN_Model/GAN_Images/malignant/"
 save_dir = save_dir_benign
-CHECKPOINT_PATH = '/home/ds21m011/mi/GAN_Model/GAN_checkpoints/training_checkpoints/'
+CHECKPOINT_PATH = '/home/ds21m011/mi/GAN_Model/GAN_checkpoints/training_checkpoints_64/'
 
-BATCH_SIZE = 16
+BATCH_SIZE = 32
 EPOCHS = int(sys.argv[1])
 noise_dim = 100
 num_examples_to_generate = 1
@@ -28,9 +31,9 @@ def main():
     logging.info(tf.config.list_physical_devices('GPU'))
 
     files_benign = get_all_images(BENIGN_PATH)
-    logging.info(f"Sample size of benign images: {len(files_benign)}")
+    logging.info(f"Sample size of benign images:{len(files_benign)}")
     files_malignant = get_all_images(MALIGNANT_PATH)
-    logging.info(f"Sample size of malignant images: {len(files_malignant)}")
+    logging.info(f"Sample size of malignant images:{len(files_malignant)}")
 
     # TODO: add a switch for benign/malignant/all files being generated
 
@@ -77,7 +80,7 @@ def main():
         generate_and_save_images(generator, epoch + 1, random_vector_for_generation, save_dir)
 
         # saving (checkpoint) the model every 15 epochs
-        if (epoch + 1) % 300 == 0:  # das auf 15 ändern
+        if (epoch + 1) % 1000 == 0:  # das auf 15 ändern
 
             # checkpoint.save(file_prefix = checkpoint_prefix)
             checkpoint.save(file_prefix=checkpoint_prefix)
