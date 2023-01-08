@@ -9,7 +9,7 @@ from utils_generate_eval_GAN import *
 
 # Global Variables
 NOISE_DIM = 100
-NUM_EXAMPLES_TO_GENERATE = 2
+NUM_EXAMPLES_TO_GENERATE = 100
 
 # # benign types
 # ADENOSIS = 'adenosis'
@@ -52,6 +52,8 @@ def generate_sample_images(generator, generator_optimizer, checkpoint_paths, sav
 
     for index, checkpoint_path in enumerate(checkpoint_paths):
 
+        print(checkpoint_path)
+
         checkpoint = tf.train.Checkpoint(generator_optimizer = generator_optimizer, generator = generator)
         checkpoint.restore(tf.train.latest_checkpoint(checkpoint_path))
 
@@ -64,15 +66,14 @@ def generate_sample_images(generator, generator_optimizer, checkpoint_paths, sav
 
         for number, prediction in enumerate(predictions):
 
-            fig = plt.figure(figsize=(8, 8))
-            plt.imshow(prediction[ :, :, 0] * 127.5 + 127.5, cmap = 'gray')
-            plt.axis('off')
-            plt.savefig(os.path.join(save_dirs[index], 'GAN_Image_{}_{:04d}.png'.format(cancer_types[index], number)))
-
+            # fig = plt.figure(figsize=(8, 8))
+            # plt.imshow(prediction[ :, :, 0] * 127.5 + 127.5, cmap = 'gray')
+            # plt.axis('off')
+            # plt.savefig(os.path.join(save_dirs[index], 'GAN_Image_{}_{:04d}.png'.format(cancer_types[index], number)))
             # plt.close()
 
-            # image = np.array(prediction[ :, :, 0] * 127.5 + 127.5)
-            # cv2.imwrite(os.path.join(save_dirs[index], 'GAN_Image_{}_{:04d}.png'.format(cancer_types[index], number)), image)
+            image = np.array(prediction[ :, :, 0] * 127.5 + 127.5)
+            cv2.imwrite(os.path.join(save_dirs[index], 'GAN_Image_{}_{:04d}.png'.format(cancer_types[index], number)), image)
 
 
 
