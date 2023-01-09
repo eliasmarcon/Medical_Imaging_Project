@@ -1,9 +1,12 @@
 # import necessary packages
 import logging
+import os
 import sys
 import time
-
 from utils_gan import *
+
+logging.basicConfig()
+logging.getLogger().setLevel(logging.INFO)
 
 # TODO: add commandline arguments (epoch, batch size, img output dir, model_name)
 # To add commandline arguments, we can either utilize 'sys.argv[]' or the CLICK library
@@ -12,14 +15,17 @@ BENIGN_PATH = '/home/ds21m011/mi/dat/benign/'
 MALIGNANT_PATH = '/home/ds21m011/mi/dat/malignant/'
 save_dir_benign = "/home/ds21m011/mi/GAN_Model/GAN_Images/benign/"
 save_dir_malignant = "/home/ds21m011/mi/GAN_Model/GAN_Images/malignant/"
-save_dir = save_dir_benign
-CHECKPOINT_PATH = '/home/ds21m011/mi/GAN_Model/GAN_checkpoints/training_checkpoints/'
+save_dir = save_dir_malignant
+#CHECKPOINT_PATH = '/home/ds21m011/mi/GAN_Model/GAN_checkpoints/training_checkpoints_mal/'
 
-BATCH_SIZE = 16
+FILES_PATH = sys.argv[2]
+SAVE_DIR = sys.argv[3]
+CHECKPOINT_PATH = sys.argv[4]
+
+BATCH_SIZE = int(sys.argv[5])
 EPOCHS = int(sys.argv[1])
 noise_dim = 100
 num_examples_to_generate = 1
-
 
 # TODO: check if GPU is being used, before runnning the training
 
@@ -27,14 +33,14 @@ def main():
     logging.info(f'Start of script in {os.getcwd()}')
     logging.info(tf.config.list_physical_devices('GPU'))
 
-    files_benign = get_all_images(BENIGN_PATH)
-    logging.info(f"Sample size of benign images: {len(files_benign)}")
-    files_malignant = get_all_images(MALIGNANT_PATH)
-    logging.info(f"Sample size of malignant images: {len(files_malignant)}")
+   # files_benign = get_all_images(BENIGN_PATH)
+  #  logging.info(f"Sample size of benign images: {len(files_benign)}")
+ #   files_malignant = get_all_images(MALIGNANT_PATH)
+#    logging.info(f"Sample size of malignant images: {len(files_malignant)}")
 
     # TODO: add a switch for benign/malignant/all files being generated
-
-    dataset = prepare_dataset(files_benign)
+    files = get_images_single_folder(FILES_PATH)
+    dataset = prepare_dataset(files)
 
     generator = Generator()
     discriminator = Discriminator()
@@ -45,7 +51,7 @@ def main():
                                    discriminator)
     checkpoint_prefix = os.path.join(CHECKPOINT_PATH, "ckpt")
     checkpoint.restore(tf.train.latest_checkpoint(CHECKPOINT_PATH))
-
+    
     # random vector for image generation 
     random_vector_for_generation = tf.random.normal([num_examples_to_generate, noise_dim])
 
@@ -74,7 +80,7 @@ def main():
 
         # display.clear_output(wait=True)
 
-        generate_and_save_images(generator, epoch + 1, random_vector_for_generation, save_dir)
+        generate_and_save_images(generator, epoch + 1, random_vector_for_generation, SAVE_DIR)
 
         # saving (checkpoint) the model every 15 epochs
         if (epoch + 1) % 300 == 0:  # das auf 15 ändern
@@ -86,7 +92,7 @@ def main():
 
     # generating after the final epoch
     # display.clear_output(wait = True)
-    generate_and_save_images(generator, epoch, random_vector_for_generation, save_dir)
+    generate_and_save_images(generator, epoch, random_vector_for_generation, SAVE_DIR)
 
 
 if __name__ == '__main__':

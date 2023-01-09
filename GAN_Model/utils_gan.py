@@ -26,9 +26,16 @@ def get_all_images(path):
                 files.append(img)
     return files
 
+def get_images_single_folder(path):
+    files = []
+    for img in os.listdir(path):
+        files.append(path + img)
+    return files
+
 
 # read images and provide a consistent size
 def resize_image(filename):
+
     image_string = tf.io.read_file(filename)
     image_decoded = tf.image.decode_png(image_string, channels=NUM_CHANNELS)
     image_resized = tf.image.resize(image_decoded, IMG_SHAPE)
@@ -77,14 +84,14 @@ def generate_and_save_images(model, epoch, test_input, imsave_dir):
     predictions = model(test_input, training=False)
     fig = plt.figure(figsize=(8, 8))
 
-    #    for i in range(predictions.shape[0]):
-    #       plt.subplot(4, 4, i + 1)
+#    for i in range(predictions.shape[0]):
+ #       plt.subplot(4, 4, i + 1)
     plt.imshow(predictions[0, :, :, 0] * 127.5 + 127.5, cmap='gray')
     plt.title(f'Generated image at epoch: {epoch}')
     plt.axis('off')
 
     # tight_layout minimizes the overlap between 2 sub-plots
-    # plt.tight_layout()
+   # plt.tight_layout()
     plt.savefig(os.path.join(imsave_dir, 'image_at_epoch_{:04d}.png'.format(epoch)))
     plt.close()
 
