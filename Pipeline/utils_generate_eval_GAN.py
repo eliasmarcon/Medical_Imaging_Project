@@ -48,32 +48,28 @@ def get_paths(path_origin, types_array):
 
 
 # generate sample images
-def generate_sample_images(generator, generator_optimizer, checkpoint_paths, save_dirs, cancer_types):
+def generate_sample_images(generator, generator_optimizer, checkpoint_path, save_dir, cancer_type):
 
-    for index, checkpoint_path in enumerate(checkpoint_paths):
+    checkpoint = tf.train.Checkpoint(generator_optimizer = generator_optimizer, generator = generator)
+    checkpoint.restore(tf.train.latest_checkpoint(checkpoint_path))
 
-        print(checkpoint_path)
+    # random vector for image generation 
+    random_vector_for_generation = tf.random.normal([NUM_EXAMPLES_TO_GENERATE, NOISE_DIM])
 
-        checkpoint = tf.train.Checkpoint(generator_optimizer = generator_optimizer, generator = generator)
-        checkpoint.restore(tf.train.latest_checkpoint(checkpoint_path))
+    predictions = generator(random_vector_for_generation, training = False)
 
-        # random vector for image generation 
-        random_vector_for_generation = tf.random.normal([NUM_EXAMPLES_TO_GENERATE, NOISE_DIM])
+    for number, prediction in enumerate(predictions):
 
-        # print(random_vector_for_generation)
+        fig = plt.figure(figsize=(8, 8))
+        plt.imshow(prediction[ :, :, 0] * 127.5 + 127.5, cmap = 'gray')
+        plt.axis('off')
+        plt.savefig(os.path.join(save_dir, 'GAN_Image_{}_{:04d}.png'.format(cancer_type, number)))
+        plt.close()
 
-        predictions = generator(random_vector_for_generation, training = False)
+        # image = np.array(prediction[ :, :, 0] * 127.5 + 127.5)
+        # cv2.imwrite(os.path.join(save_dir, 'gan_image_{}_{:04d}.png'.format(cancer_type, number)), image)
 
-        for number, prediction in enumerate(predictions):
-
-            # fig = plt.figure(figsize=(8, 8))
-            # plt.imshow(prediction[ :, :, 0] * 127.5 + 127.5, cmap = 'gray')
-            # plt.axis('off')
-            # plt.savefig(os.path.join(save_dirs[index], 'GAN_Image_{}_{:04d}.png'.format(cancer_types[index], number)))
-            # plt.close()
-
-            image = np.array(prediction[ :, :, 0] * 127.5 + 127.5)
-            cv2.imwrite(os.path.join(save_dirs[index], 'GAN_Image_{}_{:04d}.png'.format(cancer_types[index], number)), image)
+    return 'Done generating Images for ' + cancer_type
 
 
 
