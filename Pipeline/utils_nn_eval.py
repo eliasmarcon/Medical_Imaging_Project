@@ -21,7 +21,7 @@ from sklearn.model_selection import train_test_split
 # global Variables
 IMAGE_SIZE = 256
 BATCH_SIZE = 16
-EPOCHS = 2
+EPOCHS = 5
 
 GAN_BENIGN_PATH = 'D:/Medical_Imaging_Zusatz/Gan_Images/benign/'
 GAN_MALIGNANT_PATH = 'D:/Medical_Imaging_Zusatz/Gan_Images/malignant/'
