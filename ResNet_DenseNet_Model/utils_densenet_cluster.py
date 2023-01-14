@@ -2,10 +2,10 @@ import os
 
 import cv2
 import numpy as np
+import tensorflow as tf
 from PIL import Image
 from keras import layers
 from keras.models import Sequential
-from keras.optimizers import Adam
 
 
 # get images function
@@ -41,9 +41,9 @@ def build_model(backbone, lr = 1e-4):
     
     
     model.compile(
-        loss = 'binary_crossentropy',
-        optimizer = Adam(learning_rate = lr),
-        metrics = ['accuracy']
+        loss='binary_crossentropy',
+        optimizer=tf.keras.optimizers.Adam(learning_rate=lr),
+        metrics=['accuracy']
     )
     
     return model

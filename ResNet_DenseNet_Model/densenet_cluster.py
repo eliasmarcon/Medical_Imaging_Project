@@ -35,7 +35,7 @@ import sys
 
 import numpy as np
 from keras import backend as K
-from keras.applications import DenseNet201
+from keras.applications.densenet import DenseNet201
 from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau
 from keras.preprocessing.image import ImageDataGenerator
 from keras.utils.np_utils import to_categorical
@@ -49,8 +49,8 @@ BATCH_SIZE = sys.argv[2]
 RESOLUTION = sys.argv[3]
 INPUT_SHAPE = sys.argv[4]
 
-benign_path = f'/home/ds21m011/mi/dat/BreaKHis_v1/Dataset_{RESOLUTION}X/benign/'
-malignant_path = f'/home/ds21m011/mi/dat/BreaKHis_v1/Dataset_{RESOLUTION}X/malignant/'
+benign_path = f'../dat/BreaKHis_v1/Dataset_{RESOLUTION}X/benign/'
+malignant_path = f'../dat/BreaKHis_v1/Dataset_{RESOLUTION}X/malignant/'
 # Checkpoint
 filepath = f"/home/ds21m011/mi/weights_densenet_{RESOLUTION}.hdf5"
 checkpoint = ModelCheckpoint(filepath, monitor='val_accuracy', verbose=1, save_best_only=True, mode='max')
@@ -169,5 +169,5 @@ history = model.fit(
 
 
 # Dump History
-with open(f'./home/ds21m011/mi/densenet_saves/history/history_{RESOLUTION}_64.json/', 'w') as f:
+with open(f'/home/ds21m011/mi/densenet_saves/history/history_{RESOLUTION}_64.json/', 'w') as f:
     json.dump(str(history.history), f)
