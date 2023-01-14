@@ -2,15 +2,26 @@
 - higher resolution --> better test accuracy
 - 
 
+# To Do:
+1. GAN architecture tests
+2. If successful, train 1+1 on cluster
+3a. With trained models create pipeline for Densenet and evaluation
+3b. Train GAN on remaining data
+
 # Next testing steps/hypotheses
+**Most likely, our architecture is not useful for our kind of images!**
+
+
 ## Test higher noise dimension
 - Idea: test, whether the amount of noise values is responsible for the low variety in output images.
 - cluster: run GAN 64x64 images and higher noise dim
 - expected output: no change in variety, because other GANs have diverse output with less noise dim
+--> NOT tested, because we saw in other architectures, that less was enough
+
 
 ## New GAN architecture
 - Idea: our GAN is not made for high dimensions, therefore we may need to change the layer structure
--> test new GANs from online resources
+-> test new GANs from online resources (kaggle)
 - expected output: better/more diverse output images, especially for 64x64 images
 
 
