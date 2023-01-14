@@ -2,6 +2,17 @@
 - higher resolution --> better test accuracy
 - 
 
+# Next testing steps/hypotheses
+## Test higher noise dimension
+- Idea: test, whether the amount of noise values is responsible for the low variety in output images.
+- cluster: run GAN 64x64 images and higher noise dim
+- expected output: no change in variety, because other GANs have diverse output with less noise dim
+
+## New GAN architecture
+- Idea: our GAN is not made for high dimensions, therefore we may need to change the layer structure
+-> test new GANs from online resources
+- expected output: better/more diverse output images, especially for 64x64 images
+
 
 
 
