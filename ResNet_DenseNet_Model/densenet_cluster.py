@@ -28,35 +28,32 @@
 # from keras.optimizers import Adam
 
 
-import json
-import numpy as np
 import gc
+import json
 import random
+import sys
 
-
+import numpy as np
 from keras import backend as K
-from sklearn.model_selection import train_test_split
-
 from keras.applications import DenseNet201
 from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau
 from keras.preprocessing.image import ImageDataGenerator
 from keras.utils.np_utils import to_categorical
+from sklearn.model_selection import train_test_split
 
 import utils_densenet_cluster
 
-
 # Global Variables
-BATCH_SIZE = 16
-INPUT_SHAPE = 256
-EPOCHS = 3
+EPOCHS = sys.argv[1]
+BATCH_SIZE = sys.argv[2]
+RESOLUTION = sys.argv[3]
+INPUT_SHAPE = sys.argv[4]
 
-
-benign_path = 'D:/Medical_Imaging_Zusatz/BreaKHis_v1/Dataset_200X/benign/'
-malignant_path = 'D:/Medical_Imaging_Zusatz/BreaKHis_v1/Dataset_200X/malignant/'
+benign_path = f'/home/ds21m011/mi/dat/BreaKHis_v1/Dataset_{RESOLUTION}X/benign/'
+malignant_path = f'/home/ds21m011/mi/dat/BreaKHis_v1/Dataset_{RESOLUTION}X/malignant/'
 # Checkpoint
-filepath = "./weights_densenet.hdf5"
-checkpoint = ModelCheckpoint(filepath, monitor = 'val_accuracy', verbose = 1, save_best_only = True, mode = 'max')
-
+filepath = f"/home/ds21m011/mi/weights_densenet_{RESOLUTION}.hdf5"
+checkpoint = ModelCheckpoint(filepath, monitor='val_accuracy', verbose=1, save_best_only=True, mode='max')
 
 #################################################
 #################################################
@@ -140,13 +137,13 @@ train_generator = ImageDataGenerator(
 K.clear_session()
 gc.collect()
 
-resnet = DenseNet201(
-                        weights = 'imagenet',
-                        include_top = False,
-                        input_shape = (INPUT_SHAPE, INPUT_SHAPE, 3)
-                    )
+densenet = DenseNet201(
+    weights='imagenet',
+    include_top=False,
+    input_shape=(INPUT_SHAPE, INPUT_SHAPE, 3)
+)
 
-model = utils_densenet_cluster.build_model(resnet , lr = 1e-4)
+model = utils_densenet_cluster.build_model(densenet, lr=1e-4)
 
 
 #################################################
@@ -172,8 +169,5 @@ history = model.fit(
 
 
 # Dump History
-with open('./history_40X_64.json', 'w') as f:
-    
+with open(f'./home/ds21m011/mi/densenet_saves/history/history_{RESOLUTION}_64.json/', 'w') as f:
     json.dump(str(history.history), f)
-
-

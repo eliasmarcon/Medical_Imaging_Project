@@ -1,7 +1,7 @@
 import os
+
 import cv2
 import numpy as np
-
 from PIL import Image
 from keras import layers
 from keras.models import Sequential
@@ -35,7 +35,7 @@ def build_model(backbone, lr = 1e-4):
     model = Sequential()
     model.add(backbone)
     model.add(layers.GlobalAveragePooling2D())
-    model.add(layers.Dropout(0.5))
+    model.add(layers.Dropout(0.3))
     model.add(layers.BatchNormalization())
     model.add(layers.Dense(2, activation = 'softmax'))
     
