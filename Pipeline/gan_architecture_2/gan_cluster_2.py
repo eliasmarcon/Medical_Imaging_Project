@@ -8,7 +8,6 @@ import cv2
 import time
 
 from PIL import Image
-from IPython.display import Image
 from keras import Input
 from keras.layers import Dense, Reshape, LeakyReLU, Conv2D, Conv2DTranspose, Flatten, Dropout
 from keras.models import Model
@@ -26,7 +25,7 @@ HEIGHT = 128
 LATENT_DIM = 32
 CHANNELS = 3
 
-ITERATIONS = 15000
+ITERATIONS = 15000 # sind die Epochs
 BATCH_SIZE = 16
 CONTROL_SIZE_SQRT = 6
 
@@ -116,7 +115,7 @@ def create_discriminator():
     discriminator = Model(disc_input, x)
 
     optimizer = RMSprop(
-        lr=.0001,
+        learning_rate=.0001,
         clipvalue=1.0,
         decay=1e-8
     )
@@ -139,7 +138,7 @@ gan_input = Input(shape=(LATENT_DIM, ))
 gan_output = discriminator(generator(gan_input))
 gan = Model(gan_input, gan_output)
 
-optimizer = RMSprop(lr = .0001, clipvalue = 1.0, decay = 1e-8)
+optimizer = RMSprop(learning_rate = .0001, clipvalue = 1.0, decay = 1e-8)
 gan.compile(optimizer=optimizer, loss='binary_crossentropy')
 
 
