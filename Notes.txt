@@ -1,0 +1,25 @@
+## Histories 64x64
+- higher resolution --> better test accuracy
+- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
