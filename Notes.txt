@@ -5,6 +5,7 @@
 # To Do:
 1. GAN architecture tests
 2. If successful, train 1+1 on cluster
+2b. Train Densenet on higher res images and 64 scaled and cropped images
 3a. With trained models create pipeline for Densenet and evaluation
 3b. Train GAN on remaining data
 
