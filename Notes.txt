@@ -27,7 +27,23 @@
 - expected output: better/more diverse output images, especially for 64x64 images
 
 
+# Paper / Report Notes
+- Densenet trained on 40X, 100X, 200X, 400X with each 64x64, 128x128 and 256x256
+- It seems that resizing to 64x64 pixel does not produce any noticeable deterioration in test accuracy.
+    - 40X
+        - 64x64     - 0.88
+        - 256x256   - 0.89
+    - 100X
+        - 64x64     - 0.83
+        - 256x256   - 0.86
+    - 200X
+        - 64x64     - 0.84
+        - 256x256   - 0.84
+    - 400X 
+        - 64x64     - 0.84
+        - 256x256   - 0.80
 
+- Accuracy deteriorates by a maximum of 3% in some cases and even improves by 4% in the case of 400X.
 
 
 
