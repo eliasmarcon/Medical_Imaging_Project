@@ -8,6 +8,7 @@
 2b. Train Densenet on higher res images and 64 scaled and cropped images
 3a. With trained models create pipeline for Densenet and evaluation
 3b. Train GAN on remaining data
+4a. Try to generate all benign types
 
 # Next testing steps/hypotheses
 **Most likely, our architecture is not useful for our kind of images!**
