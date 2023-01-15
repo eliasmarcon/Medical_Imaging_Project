@@ -11,7 +11,8 @@
 
 # Next testing steps/hypotheses
 **Most likely, our architecture is not useful for our kind of images!**
-
+- Densenet on scaled images: downsampling is surprisingly no problem!
+    --> Show the scores of
 
 ## Test higher noise dimension
 - Idea: test, whether the amount of noise values is responsible for the low variety in output images.

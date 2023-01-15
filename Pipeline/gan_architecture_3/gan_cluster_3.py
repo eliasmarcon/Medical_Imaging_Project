@@ -157,7 +157,7 @@ for epoch in range(1, EPOCHS+1):
 print('Training is complete')
 
 
-Pkl_Filename = "./DCGAN.pkl"
+Pkl_Filename = f"{imsave_dir}/DCGAN.pkl"
 
 with open(Pkl_Filename, 'wb') as file: 
 
