@@ -4,3 +4,4 @@ dat/
 idea/
 *checkpoint.ipynb
 GAN_Model/.ipynb_checkpoints/
+.virtual_documents

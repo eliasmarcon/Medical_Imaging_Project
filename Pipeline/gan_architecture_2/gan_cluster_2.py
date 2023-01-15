@@ -1,23 +1,23 @@
 ### Repo
-#- https://www.kaggle.com/code/nageshsingh/generate-realistic-human-face-using-gan
+# - https://www.kaggle.com/code/nageshsingh/generate-realistic-human-face-using-gan
 
-import numpy as np # linear algebra
-import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
 import os
-import cv2
+import sys
 import time
 
+import cv2
+import numpy as np  # linear algebra
 from PIL import Image
 from keras import Input
 from keras.layers import Dense, Reshape, LeakyReLU, Conv2D, Conv2DTranspose, Flatten, Dropout
 from keras.models import Model
-from keras.optimizers import RMSprop
-
+from tensorflow.keras.optimizers import RMSprop
 
 # Loading Data
-path = 'D:/Medical_Imaging_Zusatz/BreaKHis_v1/Dataset_40X/benign/adenosis/'
-RES_DIR = 'gan_architecture_2'
+path = sys.argv[1]  # single dataset folder 'D:/Medical_Imaging_Zusatz/BreaKHis_v1/Dataset_40X/benign/adenosis/'
+RES_DIR = sys.argv[2]  # output folder '/home/ds21m011/mi/new_gans/gan_architecture_2'
 FILE_PATH = '%s/generated_%d.png'
+GAN_WEIGHTS_PATH = sys.argv[3]
 
 # Globals
 WIDTH = 128
@@ -25,19 +25,14 @@ HEIGHT = 128
 LATENT_DIM = 32
 CHANNELS = 3
 
-ITERATIONS = 15000 # sind die Epochs
+ITERATIONS = sys.argv[4]  # initial 15k
 BATCH_SIZE = 16
 CONTROL_SIZE_SQRT = 6
 
-control_vectors = np.random.normal(size = (CONTROL_SIZE_SQRT**2, LATENT_DIM)) / 2
-
-
+control_vectors = np.random.normal(size=(CONTROL_SIZE_SQRT ** 2, LATENT_DIM)) / 2
 
 if not os.path.isdir(RES_DIR):
-
     os.mkdir(RES_DIR)
-
-
 
 ## Load Images
 images = []
@@ -180,7 +175,7 @@ for step in range(ITERATIONS):
 
     if step % 50 == 49:
 
-        gan.save_weights(f'./gan_weights/gan_{step}.h5')
+        gan.save_weights(f'{GAN_WEIGHTS_PATH}/gan_{step}.h5')
 
         print('%d/%d: d_loss: %.4f,  a_loss: %.4f.  (%.1f sec)' % (step + 1, ITERATIONS, d_loss, a_loss, time.time() - start_time))
 
@@ -196,5 +191,3 @@ for step in range(ITERATIONS):
         im = Image.fromarray(np.uint8(control_image * 255))#.save(StringIO(), 'jpeg')
         im.save(FILE_PATH % (RES_DIR, images_saved))
         images_saved += 1
-
-

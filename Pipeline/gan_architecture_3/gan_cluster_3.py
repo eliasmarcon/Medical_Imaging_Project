@@ -1,36 +1,30 @@
-import numpy as np # linear algebra
-import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
-import cv2
-from PIL import Image
-import matplotlib.pyplot as plt
 import os
-from keras import preprocessing
-from keras.models import Sequential
-from keras.layers import Conv2D, Dropout, Dense, Flatten, Conv2DTranspose, BatchNormalization, LeakyReLU, Reshape
-import tensorflow as tf
-import matplotlib.pyplot as plt
-import sys
 import pickle
+import sys
+
+import cv2
+import matplotlib.pyplot as plt
+import numpy as np  # linear algebra
+from PIL import Image
+from keras.layers import Conv2D, Dropout, Dense, Flatten, Conv2DTranspose, BatchNormalization, LeakyReLU, Reshape
+from keras.models import Sequential
 
 ### Paths
-path = 'D:/Medical_Imaging_Zusatz/BreaKHis_v1/Dataset_40X/benign/adenosis/'
-imsave_dir = 'D:/Medical_Imaging_Elias/Pipeline/gan_architecture_3/Images_Epoch/'
-
+path = sys.argv[1]  # dataset path 'D:/Medical_Imaging_Zusatz/BreaKHis_v1/Dataset_40X/benign/adenosis/'
+imsave_dir = sys.argv[2]  # output path 'D:/Medical_Imaging_Elias/Pipeline/gan_architecture_3/Images_Epoch/'
 
 ### Globals
 INPUT_SHAPE = 64
 NOISE_SHAPE = 100
-EPOCHS = 100 
-BATCH_SIZE = 16 #128
+EPOCHS = sys.argv[3]  # initial 20k
+BATCH_SIZE = 16  # 128
 PLOT_COUNT = 10
-
 
 ## Load Images
 images = []
-read = lambda imname: np.asarray(Image.open(imname).convert('L')) #'LA', 'L'
+read = lambda imname: np.asarray(Image.open(imname).convert('L'))  # 'LA', 'L'
 
 for image in os.listdir(path):
-
     img = read(path + "/" + image)
     # img = cv2.imread(path + folder + "/" + image)
     # img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
