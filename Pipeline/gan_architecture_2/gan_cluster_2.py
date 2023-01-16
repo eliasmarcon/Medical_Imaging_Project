@@ -7,6 +7,7 @@ import time
 
 import cv2
 import numpy as np  # linear algebra
+import pandas as pd
 from PIL import Image
 from keras import Input
 from keras.layers import Dense, Reshape, LeakyReLU, Conv2D, Conv2DTranspose, Flatten, Dropout
@@ -25,7 +26,7 @@ HEIGHT = 128
 LATENT_DIM = 32
 CHANNELS = 3
 
-ITERATIONS = sys.argv[4]  # initial 15k
+ITERATIONS = int(sys.argv[4])  # initial 15k
 BATCH_SIZE = 16
 CONTROL_SIZE_SQRT = 6
 
@@ -144,6 +145,7 @@ start = 0
 d_losses = []
 a_losses = []
 images_saved = 0
+df = pd.DataFrame(columns=['step', 'd_loss', 'a_loss'])
 
 for step in range(ITERATIONS):
 
@@ -173,21 +175,36 @@ for step in range(ITERATIONS):
 
         start = 0
 
-    if step % 50 == 49:
+    if step % 1000 == 0:
 
-        gan.save_weights(f'{GAN_WEIGHTS_PATH}/gan_{step}.h5')
+        # gan.save_weights(f'{GAN_WEIGHTS_PATH}/gan_{step}.h5')
 
-        print('%d/%d: d_loss: %.4f,  a_loss: %.4f.  (%.1f sec)' % (step + 1, ITERATIONS, d_loss, a_loss, time.time() - start_time))
+        print('%d/%d: d_loss: %.4f,  a_loss: %.4f.  (%.1f sec)' % (
+        step + 1, ITERATIONS, d_loss, a_loss, time.time() - start_time))
 
         control_image = np.zeros((WIDTH * CONTROL_SIZE_SQRT, HEIGHT * CONTROL_SIZE_SQRT, CHANNELS))
         control_generated = generator.predict(control_vectors)
-        
-        for i in range(CONTROL_SIZE_SQRT ** 2):
 
+        for i in range(CONTROL_SIZE_SQRT ** 2):
             x_off = i % CONTROL_SIZE_SQRT
             y_off = i // CONTROL_SIZE_SQRT
-            control_image[x_off * WIDTH:(x_off + 1) * WIDTH, y_off * HEIGHT:(y_off + 1) * HEIGHT, :] = control_generated[i, :, :, :]
+            control_image[x_off * WIDTH:(x_off + 1) * WIDTH, y_off * HEIGHT:(y_off + 1) * HEIGHT,
+            :] = control_generated[i, :, :, :]
 
-        im = Image.fromarray(np.uint8(control_image * 255))#.save(StringIO(), 'jpeg')
+        im = Image.fromarray(np.uint8(control_image * 255))  # .save(StringIO(), 'jpeg')
         im.save(FILE_PATH % (RES_DIR, images_saved))
         images_saved += 1
+
+    print('%d/%d: d_loss: %.4f,  a_loss: %.4f.  (%.1f sec)' % (
+    step + 1, ITERATIONS, d_loss, a_loss, time.time() - start_time))
+    df = df.append({'step': int(step),
+                    'd_loss': d_loss,
+                    'a_loss': a_loss},
+                   ignore_index=True)
+
+df_save_path = os.path.join(GAN_WEIGHTS_PATH, "gan_loss.csv")
+df.to_csv(df_save_path, index=False)
+
+# Save model
+generator_save_path = os.path.join(GAN_WEIGHTS_PATH, 'generator_model')
+generator.save(generator_save_path)
