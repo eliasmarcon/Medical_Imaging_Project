@@ -48,8 +48,23 @@
 
 
 
-
-
+## Epochs für GANs
+- adenosis
+    - 16k
+- ductal
+    - zu schlecht weghaun
+- fibro
+    - zu schlecht weghaun
+- lobular
+    - 60k könnte klappen (ist einer der beiden out of memory)
+- mucinous
+    - zu schlecht weghaun
+- papillary
+    - 96/97k
+- phyllode
+    - 60k
+- tubular
+    - zu schlecht weghaun
 
 
 
