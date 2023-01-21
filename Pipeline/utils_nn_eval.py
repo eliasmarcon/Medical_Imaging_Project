@@ -19,15 +19,15 @@ from sklearn.model_selection import train_test_split
 
 
 # global Variables
-IMAGE_SIZE = 256
+IMAGE_SIZE = 128
 BATCH_SIZE = 16
-EPOCHS = 5
+EPOCHS = 2
 
-GAN_BENIGN_PATH = 'D:/Medical_Imaging_Zusatz/Gan_Images/benign/'
-GAN_MALIGNANT_PATH = 'D:/Medical_Imaging_Zusatz/Gan_Images/malignant/'
+GAN_BENIGN_PATH = 'D:/Medical_Imaging/Medical_Imaging_Zusatz/Gan_Images/benign/'
+GAN_MALIGNANT_PATH = 'D:/Medical_Imaging/Medical_Imaging_Zusatz/Gan_Images/malignant/'
 
-GT_BENIGN_PATH = 'D:/Medical_Imaging_Zusatz/Dataset/benign/'
-GT_MALIGNATN_PATH = 'D:/Medical_Imaging_Zusatz/Dataset/malignant/'
+GT_BENIGN_PATH = 'D:/Medical_Imaging/Medical_Imaging_Zusatz/Dataset/benign/'
+GT_MALIGNATN_PATH = 'D:/Medical_Imaging/Medical_Imaging_Zusatz/Dataset/malignant/'
 
 
 # get all images
@@ -57,8 +57,6 @@ def get_all_images(path_wish):
         for image in os.listdir(path + folder):
 
             img = read(path + folder + "/" + image)
-            # img = cv2.imread(path + folder + "/" + image)
-            # img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             img = cv2.resize(img, (IMAGE_SIZE, IMAGE_SIZE))
 
             # täusche RGB Image an damit das fürs ResNet als input verwendet werden kann
@@ -118,7 +116,7 @@ def create_split(benign_images, malignant_images, split = 0.8, test_size = 0.2):
 def display_images(x_train, y_train, title):
 
     # Display first 15 images of moles, and how they are classified
-    fig = plt.figure(figsize = (15, 15))
+    fig = plt.figure(figsize = (10, 10))
     
     columns = 4
     rows = 3
