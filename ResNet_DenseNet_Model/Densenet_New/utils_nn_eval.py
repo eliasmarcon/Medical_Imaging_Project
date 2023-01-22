@@ -176,29 +176,6 @@ def create_train_generator(range = 90):
     return train_generator
 
 
-
-# get model
-def get_model(modelname, input_shape, channels):
-
-    if modelname == 'DenseNet':
-
-        model = DenseNet201(
-                            weights = 'imagenet',
-                            include_top = False,
-                            input_shape = (input_shape, input_shape, channels)
-                        )
-
-    if modelname == 'ResNet':
-
-        model = ResNet50(
-                        weights = 'imagenet',
-                        include_top = False,
-                        input_shape = (input_shape, input_shape, channels)
-                    )
-
-    return model
-
-
 # get learning rate reducer
 def learning_rate_reducer(monitor = 'val_accuracy', min_lr = 1e-7):
 
@@ -217,22 +194,6 @@ def model_checkpoint(filepath):
                                  save_best_only = True, mode = 'max')
 
     return checkpoint
-
-
-
-
-# train model
-def train_model(model, train_generator, x_train, y_train, x_val, y_val, learn_control, checkpoint):
-
-    history = model.fit(
-                        train_generator.flow(x_train, y_train, batch_size = BATCH_SIZE),
-                        steps_per_epoch = x_train.shape[0] // BATCH_SIZE,
-                        epochs = EPOCHS,
-                        validation_data = (x_val, y_val),
-                        callbacks = [learn_control, checkpoint]
-                    )
-
-    return history
 
 
 
