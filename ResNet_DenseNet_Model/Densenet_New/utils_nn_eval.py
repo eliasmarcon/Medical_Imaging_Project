@@ -1,38 +1,32 @@
-import pandas as pd
-import numpy as np
-import cv2
 import os
+
+import cv2
 import matplotlib.pyplot as plt
-
+import numpy as np
+import pandas as pd
 from PIL import Image
-
 from keras import layers
-from keras.utils.np_utils import to_categorical
-from keras.models import Sequential
-from keras.optimizers import Adam
-from keras.preprocessing.image import ImageDataGenerator
-from keras.applications import DenseNet201
 from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau
-
+from keras.models import Sequential
+from keras.preprocessing.image import ImageDataGenerator
+from keras.utils.np_utils import to_categorical
 from sklearn.model_selection import train_test_split
-
-
+from tensorflow.keras.optimizers import Adam
 
 # global Variables
 IMAGE_SIZE = 128
 BATCH_SIZE = 16
 EPOCHS = 2
 
-GAN_BENIGN_PATH = 'D:/Medical_Imaging/Medical_Imaging_Zusatz/Gan_Images/benign/'
-GAN_MALIGNANT_PATH = 'D:/Medical_Imaging/Medical_Imaging_Zusatz/Gan_Images/malignant/'
+GAN_BENIGN_PATH = 'D:/FH/Kurse/semester_3/medical_imaging/cluster_results/new_gans/gan_images/benign/'
+GAN_MALIGNANT_PATH = 'D:/FH/Kurse/semester_3/medical_imaging/cluster_results/new_gans/gan_images/malignant/'
 
-GT_BENIGN_PATH = 'D:/Medical_Imaging/Medical_Imaging_Zusatz/Dataset/benign/'
-GT_MALIGNATN_PATH = 'D:/Medical_Imaging/Medical_Imaging_Zusatz/Dataset/malignant/'
+GT_BENIGN_PATH = 'D:/FH/Kurse/semester_3/medical_imaging/repos/Medical_Imaging_Elias/dat/mixed_dataset/benign/'
+GT_MALIGNATN_PATH = 'D:/FH/Kurse/semester_3/medical_imaging/repos/Medical_Imaging_Elias/dat/mixed_dataset/malignant/'
 
 
 # get all images
 def get_all_images(path_wish):
-
     if path_wish == 'gan_benign':
 
         path = GAN_BENIGN_PATH
