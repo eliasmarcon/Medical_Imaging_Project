@@ -2,6 +2,9 @@ dat/
 *.xml
 *.iml
 idea/
-*checkpoint.ipynb
+.checkpoint.ipynb
 GAN_Model/.ipynb_checkpoints/
 .virtual_documents
+.ipynb_checkpoints/
+*.hdf5
+__pycache__/
