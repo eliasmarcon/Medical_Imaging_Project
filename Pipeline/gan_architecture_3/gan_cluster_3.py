@@ -1,3 +1,6 @@
+# Source:
+# - https://www.kaggle.com/code/sayakdasgupta/fake-faces-with-dcgans 
+
 import os
 import pickle
 import sys
